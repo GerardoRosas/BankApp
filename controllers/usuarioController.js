@@ -1,7 +1,7 @@
 const Usuario = require('../models/Usuario');
 
-//Crear un endpoint que permita la creación de una cuenta
 
+//Crear un endpoint que permita la creación de una cuenta
 exports.nuevoUsuario = async (req, res) => {
 
     const {mail} = req.body;
@@ -58,5 +58,31 @@ exports.agregarSaldo = async (req, res) => {
         message: 'Saldo Actualizado',
         statusCode: 200
     });
+
+}
+
+// Crear un endpoint que permita la consulta de una cuenta a partir del número de
+// cuenta
+
+exports.consultarCuenta = async (req, res) => {
+    
+    const { account } = req.params;
+    console.log(req.params);
+
+    const usuario = await Usuario.findOne({ where: {account: account} });
+
+    if(!usuario){
+        return res.status(404).json({message: 'No se encontro un usuario con esa cuenta'});
+    }
+
+    res.status(200).json({
+        statusCode: 200,
+        message: 'Informacion de cuenta',
+        id: usuario.id,
+        account: usuario.account,
+        balance: usuario.balance,
+        name: usuario.name,
+        mail: usuario.mail
+    })
 
 }

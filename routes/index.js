@@ -15,6 +15,10 @@ module.exports = function() {
         usuarioController.agregarSaldo
     )
 
+    router.get('/account/:account', 
+        usuarioController.consultarCuenta
+    )
+
 
     return router;
 }

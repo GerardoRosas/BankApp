@@ -21,7 +21,7 @@ const Usuario = db.define('usuarios', {
         allowNull: false,
     },
     account:{
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(11),
         allowNull: false,
         // validate:{
         //     max:{
