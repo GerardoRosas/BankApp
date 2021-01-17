@@ -11,9 +11,9 @@ module.exports = function() {
         usuarioController.nuevoUsuario
     );
 
-    // router.put('/account',
-    //     usuarioController.agregarSaldo
-    // )
+    router.put('/account',
+        usuarioController.agregarSaldo
+    )
 
 
     return router;

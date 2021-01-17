@@ -34,18 +34,29 @@ exports.nuevoUsuario = async (req, res) => {
 //Crear un endpoint que permita agregar saldo a una cuenta a partir del campo
 //“account” (número de cuenta):
 
-// exports.agregarSaldo = async (req, res) => {
+exports.agregarSaldo = async (req, res) => {
 
-//     const {account, balance} = req.body;
+    const {account, balance} = req.body;
 
-//     //Verificar si el usuario ya estuvo registrado
-//     let usuario = await Usuario.findOne({mail});
+    //Verificar si el usuario ya estuvo registrado
+    let usuario = await Usuario.findOne({where: { account: account }});
+    
+    if(!usuario){
+        return res.status(404).json({message: 'Account not found'})
+    }
 
-//     // if(usuario){
-//     //     return res.status(404).json({msg: 'El usuario ya se encuentra registrado'});
-//     // }
+    try {
+        usuario.balance += balance;
+        await usuario.save()
+    } catch (error) {
+        console.log(error);
+    }
+    
+    res.status(200).json({ 
+        account: account, 
+        balance: usuario.balance, 
+        message: 'Saldo Actualizado',
+        statusCode: 200
+    });
 
-
-
-//     res.status(200).json({message: 'Saldo Actualizado', statusCode: 200})
-// }
+}
