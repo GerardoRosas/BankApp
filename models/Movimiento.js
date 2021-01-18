@@ -1,4 +1,4 @@
-const Sequelize, { DataTypes } = require('sequelize');
+const  { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/db');
 
 const Movimiento = db.define('movimientos', {
