@@ -91,7 +91,7 @@ exports.consultarMovimiento = async (req, res) => {
     if(usuario && movement){
         res.status(200).json({
             statusCode: 200,
-            message: "Movimiento de cuenta",
+            message: "Movimientos de cuenta",
             account,
             movements: [
                 movement

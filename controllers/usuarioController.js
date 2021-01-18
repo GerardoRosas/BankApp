@@ -1,28 +1,46 @@
 const Usuario = require('../models/Usuario');
+const fetch = require('node-fetch');
 
 
 //Crear un endpoint que permita la creación de una cuenta
 exports.nuevoUsuario = async (req, res) => {
 
-    const {mail} = req.body;
+    const {mail, name} = req.body;
 
     //Verificar si el usuario ya estuvo registrado
-    let usuario = await Usuario.findOne({mail});
-
-    if(usuario){
-        return res.status(404).json({message: 'El usuario ya se encuentra registrado'});
-    }
+    // let usuario = await Usuario.findAll({where: { mail:mail }});
+    
+    // if(usuario === null){
+    //     return res.status(404).json({message: 'El usuario ya se encuentra registrado'});
+    // }
 
     // //Creamos nuevo usuario
-    usuario = new Usuario(req.body);
+    let usuario = new Usuario(req.body);
+
+    //Consumiendo web service
+    const url = 'https://60005b36cb21e10017af8d5b.mockapi.io/api/v1/account';
+    let webService;
+    await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            name: name,
+            mail: mail
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            webService = data;
+        })
+    // const resultado = webService.find( cuenta => cuenta.account );
+    const { id, account} = webService;
     
-    const numero = '59823483';
-    const newStr = numero.padEnd(11, `00${usuario.id}`);
+    const numero = account;
+    const newStr = numero.padEnd(11, `00${id}`);
     usuario.account = newStr;
     console.log(usuario.dataValues);
     
     try {
-        //await usuario.save()
+        await usuario.save()
         res.status(200).json({usuario, message: 'Cuenta creada', statusCode: 200})
     } catch (error) {
         console.log(error);
