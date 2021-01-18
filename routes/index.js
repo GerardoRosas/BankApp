@@ -16,6 +16,9 @@ module.exports = function() {
 
     router.post('/account/movement', movimientoController.crearMovimiento);
 
+    router.put('/account/movement', movimientoController.actualizarMovimiento);
 
+    router.get('/account/movements/:account', movimientoController.consultarMovimiento)
+    
     return router;
 }

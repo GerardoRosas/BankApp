@@ -14,7 +14,7 @@ const Movimiento = db.define('movimientos', {
         defaultValue: 'M001'
     },
     description:{
-        type: Sequelize.STRING(4),
+        type: Sequelize.STRING(50),
         defaultValue: '',
     },
     amount:{

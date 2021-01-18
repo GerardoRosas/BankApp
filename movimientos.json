@@ -1,0 +1,19 @@
+{
+    "movimientos":[
+        {
+            "id" : "1" ,
+            "name" : "Movimiento" ,
+            "code" : "M001"
+        },
+        {
+            "id" : "2" ,
+            "name" : "Compra por internet" ,
+            "code" : "M002"
+        },
+        {
+            "id" : "3" ,
+            "name" : "Gastos en general" ,
+            "code" : "M003"
+        }
+    ]
+}

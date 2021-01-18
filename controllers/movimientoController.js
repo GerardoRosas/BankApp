@@ -1,5 +1,6 @@
 const Movimiento = require('../models/Movimiento');
 const Usuario = require('../models/Usuario');
+const fetch = require('node-fetch');
 
 exports.crearMovimiento = async ( req, res ) => {
 
@@ -13,6 +14,10 @@ exports.crearMovimiento = async ( req, res ) => {
     }
 
     const { balance } = userSelected;
+
+    //Creamos movimeinto en BD
+    let movimiento = new Movimiento(req.body);
+    console.log(movimiento);
     
     if(balance < amount){
         return res.status(404).json({
@@ -22,6 +27,7 @@ exports.crearMovimiento = async ( req, res ) => {
     }else if(balance >= amount){
         userSelected.balance -= amount;
         await userSelected.save();
+        await movimiento.save();
         res.status(200).json({
             statusCode: 200,
             message: "Movimiento registrado"
@@ -29,3 +35,46 @@ exports.crearMovimiento = async ( req, res ) => {
     }
 
 }
+
+//Crear un endpoint que permita la actualización del tipo de movimiento
+
+exports.actualizarMovimiento = async (req, res) => {
+    
+    let arreglo;
+    const { movementCode } = req.body; //se manda un M002
+    
+    //Utilizando la URL que nos da json-server
+    const url = 'http://localhost:3000/movimientos';
+    await fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            arreglo = data;
+        })
+    
+    
+    const resultado = arreglo.find( movement => movement.code === movementCode);
+    const { name, code } = resultado;
+
+    //Consultamos la BD para la actualizacion
+    let movimiento = await Movimiento.findOne({ where : { movementCode : code }});
+
+    if(!movimiento){
+        return res.status(404).json({
+            message: "EL tipo de movimiento no existe",
+            statusCode: 404
+        })
+    }
+
+    try {
+        movimiento.description = name;
+        await movimiento.save();
+        res.status(200).json({
+            statusCode: 200,
+            message: "Movimiento actualizado"
+        })
+    } catch (error) {
+        console.log(error);
+    }
+   
+}
+
