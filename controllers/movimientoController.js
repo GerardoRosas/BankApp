@@ -78,3 +78,25 @@ exports.actualizarMovimiento = async (req, res) => {
    
 }
 
+//Crear un endpoint que permita la consulta de los movimientos de una cuenta a partir
+//del número de cuenta account
+
+exports.consultarMovimiento = async (req, res) => {
+    const { account } = req.params;
+
+    let usuario = await Usuario.findOne({ where: {account: account}});
+    let movement = await Movimiento.find({ where: {account: account}});
+    console.log(movement);
+
+    if(usuario && movement){
+        res.status(200).json({
+            statusCode: 200,
+            message: "Movimiento de cuenta",
+            account,
+            movements: [
+                movement
+            ]
+        })
+    }
+
+}
